@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns="http://ns.adobe.com/air/application/3.3">
+  <versionNumber>1.0.0</versionNumber>
+  <versionLabel>code-name TrckrTime</versionLabel>
+  <id>com.dlktsn.trckrtime</id>
+  <copyright>http://www.dlktsn.com</copyright>
+  <!--
+	<extensions>
+    	<extensionID>com.adobe.Vibration</extensionID>
+    </extensions>
+-->
+  <filename>trckrtime</filename>
+  <name>trckrtime</name>
+  <initialWindow>
+    <content>trckrtime.swf</content>
+    <depthAndStencil>true</depthAndStencil>
+    <!-- (true or false)-->
+    <softKeyboardBehavior>pan</softKeyboardBehavior>
+    <!-- ("pan" or "none") -->
+    <systemChrome>none</systemChrome>
+    <transparent>true</transparent>
+    <minimizable>false</minimizable>
+    <maximizable>false</maximizable>
+    <resizable>false</resizable>
+    <visible>true</visible>
+    <autoOrients>false</autoOrients>
+    <fullScreen>false</fullScreen>
+    <aspectRatio>portrait</aspectRatio>
+    <!-- ("portrait" or "landscape") -->
+    <renderMode>direct</renderMode>
+    <!-- (auto, cpu, gpu, or direct)-->
+  </initialWindow>
+  <supportedProfiles>desktop extendedDesktop mobileDevice extendedMobileDevice</supportedProfiles>
+  <!--(desktop extendedDesktop mobileDevice extendedMobileDevice)-->
+  <customUpdateUI>true</customUpdateUI>
+  <allowBrowserInvocation>true</allowBrowserInvocation>
+  <icon>
+    <image29x29>./icons/icon29.png</image29x29>
+    <image128x128>AppIcons/128x128-icon128.png</image128x128>
+    <image16x16>AppIcons/16x16-icon16.png</image16x16>
+    <image72x72>AppIcons/72x72-icon72.png</image72x72>
+    <image48x48>AppIcons/48x48-icon48.png</image48x48>
+    <image32x32>AppIcons/32x32-icon32.png</image32x32>
+    <image36x36>AppIcons/36x36-icon36.png</image36x36>
+  </icon>
+  <android>
+    <manifestAdditions><![CDATA[<manifest android:installLocation="auto">
+			    <uses-permission android:name="android.permission.VIBRATE"/>
+				<uses-permission android:name="android.permission.INTERNET"/>
+				<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+				<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+				<uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION"/>
+				<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+				<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+				<uses-permission android:name="android.permission.WRITE_GSERVICES"/>
+				<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+				
+				<uses-configuration android:reqFiveWayNav="true"/>
+				<uses-feature android:required="true" android:name="android.hardware.touchscreen.multitouch"/>
+				
+				<supports-screens android:normalScreens="true"/>
+
+				<application android:enabled="true" android:debuggable="true">
+				  
+				  <service android:name="com.adobe.ep.localnotifications.LocalNotificationIntentService"/>
+				  
+					<activity android:excludeFromRecents="false">
+						<intent-filter>
+							<action android:name="android.intent.action.MAIN"/>
+							<category android:name="android.intent.category.LAUNCHER"/>
+						</intent-filter>
+					</activity>
+				</application>
+			</manifest>]]></manifestAdditions>
+    <colorDepth>32bit</colorDepth>
+    <!-- ("32bit" or "16bit"). Optional. Default 16bit before namespace 3.0, 32bit after -->
+  </android>
+  <iPhone>
+    <InfoAdditions><![CDATA[<key>UIRequiredDeviceCapabilities</key>
+                <array>
+					<string>gps</string>
+					<string>armv7</string>
+					<string>armv6</string>
+					<string>telephony</string>
+					<string>wifi</string>
+					<string>location-services</string> 
+                </array>
+				
+				<key>UIPrerenderedIcon</key> 
+                <string>YES</string>
+        
+                <key>UIApplicationExitsOnSuspend</key>
+                <string>YES</string>
+
+                <key>UIStatusBarStyle</key> 
+		        <string>UIStatusBarStyleBlackOpaque</string> 
+
+		        <key>UIRequiresPersistentWiFi</key> 
+		        <string>YES</string>
+		        
+		        <key>UIDeviceFamily</key> 
+				<array> 
+				    <string>1</string> 
+				    <string>2</string> 
+				</array>]]></InfoAdditions>
+    <requestedDisplayResolution>high</requestedDisplayResolution>
+    <!-- ("standard" or "high") -->
+  </iPhone>
+</application>
+

@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="compiler" default="all" basedir=".">
+	<property file="compiler.properties" />
+	<property file="build.properties" />
+	
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+	  <classpath>
+	    <pathelement location="${project-resources}/ant/ant-contrib-1.0b3.jar"/>
+	  </classpath>
+	</taskdef>
+	
+	<target name="clean">
+		<delete dir="${project-building}" verbose="false"/>
+		<delete dir="${ios-deploy}" verbose="false"/>
+		<delete dir="${air-deploy}" verbose="false"/>
+		<delete dir="${swf-deploy}" verbose="false"/>
+		<delete dir="${android-deploy}" verbose="false"/>
+		<delete dir="${extensions}/swc" verbose="false"/>
+		<delete file="${project-root}/${swf}" verbose="false"/>
+		<delete file="${project-classes}/${swf}" verbose="false"/>
+		
+		<mkdir dir="${project-building}"/>
+	</target>
+
+	<target name="copy">
+		<copy todir="${project-building}" overwrite="true" verbose="false">
+			 <fileset dir="${project-resources}">
+				<include name="icons/**"/>
+			 </fileset>
+		</copy>
+		
+		<copy todir="${project-building}" overwrite="true" verbose="false">
+			 <fileset dir="${project-resources}">
+				<include name="assets/**"/>
+			 </fileset>
+		</copy>
+		
+		<copy todir="${project-building}" overwrite="true" verbose="false">
+			 <fileset dir="${project-resources}/splash-screens">
+				<include name="*.png"/>
+			 </fileset>
+		</copy>
+	</target>
+
+	<target name="compile" depends="copy">
+		<exec executable="${MXMLC}" failonerror="true">
+			<arg line="
+				+configname=airmobile 
+	            -debug=${debug-version}
+				-use-network=false
+				-optimize=true
+				-use-gpu=true
+				-use-direct-blit=true
+				-incremental=false
+				-library-path+=${project-assets}
+				-library-path+=${project-anes}
+				-library-path+=${project-third-party}
+				-output ${project-deploy}/swf/${swf} ${mainclass} 
+				-source-path+=${project-classes}
+				-swf-version=${air-version}
+			"/>
+		</exec>
+		<copy file="${project-deploy}/swf/${swf}" tofile="${project-root}/${swf}"/>
+	</target>
+
+	<target name="all">
+		<antcall target="compile"></antcall>
+		<antcall target="publish-ios"></antcall>
+		<antcall target="publish-android"></antcall>
+		<antcall target="clean"></antcall>
+		
+		<!--<antcall target="launch-ios"></antcall>-->
+		<antcall target="launch-android"></antcall>
+	</target>
+
+	<target name="publish-ios">
+		<exec executable="${ADT}" failonerror="true">
+			<arg line="-package
+						-target ipa-debug-interpreter
+						-provisioning-profile ${ios-mobileprofile}
+						-storetype ${ios-storetype}
+						-keystore ${ios-certificate}
+						-storepass ${ios-certificatepass}
+						${ios-deploy}
+						${descriptor}
+						${swf}
+						-extdir ${project-anes}
+						-C ${project-building} ${icons} ${splash-screens} ${external-assets}"/>
+		</exec>
+	</target>
+
+	<target name="uninstall-ios">
+		<exec executable="${ADT}" failonerror="false">
+			<arg line="-uninstallApp
+						-platform
+						ios
+						-platformsdk
+						${IOS-SIMULATOR}
+						-device
+						${device-simulator}
+						-appid
+						${project-package}.${project-alias}"/>
+		</exec>
+	</target>
+
+	<target name="install-ios" depends="uninstall-ios">
+		<exec executable="${ADT}" failonerror="true">
+			<arg line="-installApp
+						-platform
+						ios
+						-platformsdk
+						${IOS-SIMULATOR}
+						-device
+						${device-simulator}
+						-package
+						${ios-deploy}"/>
+		</exec>
+	</target>
+
+	<target name="launch-ios" depends="install-ios">
+		<exec executable="${ADT}" failonerror="true">
+			<arg line="-launchApp
+						-platform
+						ios
+						-platformsdk
+						${IOS-SIMULATOR}
+						-device
+						${device-simulator}
+						-appid
+						${project-package}.${project-alias}"/>
+		</exec>
+	</target>
+
+	<target name="publish-android">
+		<exec executable="${ADT}" failonerror="true">
+			<arg line="-package
+						-target apk-debug
+						-storetype ${android-storetype}
+						-keystore ${android-certificate}
+						-storepass ${android-certificatepass}
+						${android-deploy}
+						${descriptor}
+						${swf}
+						-extdir ${project-anes}
+						-C ${project-building} ${icons} ${external-assets}"/>
+		</exec>
+	</target>
+
+	<target name="uninstall-android">
+		<exec executable="${ADT}" failonerror="false">
+			<arg line="-uninstallApp
+						-platform
+						android
+						-platformsdk
+						${ANDROID}
+						-appid
+						${project-package}.${project-alias}"/>
+		</exec>
+	</target>
+
+	<target name="install-android" depends="uninstall-android">
+		<exec executable="${ADT}" failonerror="true">
+			<arg line="-installApp
+						-platform
+						android
+						-platformsdk
+						${ANDROID}
+						-package
+						${android-deploy}"/>
+		</exec>
+	</target>
+
+	<target name="launch-android" depends="install-android">
+		<exec executable="${ADT}" failonerror="true">
+			<arg line="-launchApp
+						-platform
+						android
+						-platformsdk
+						${ANDROID}
+						-appid
+						${project-package}.${project-alias}"/>
+		</exec>
+	</target>
+	
+	<target name="publish-air" depends="compile">
+		<exec executable="${ADT}" failonerror="true">
+			<arg line="-package
+						-storetype ${air-storetype}
+						-keystore ${air-certificate}
+						-storepass ${air-certificatepass}
+						${air-deploy}
+						${descriptor}
+						${swf}
+						-extdir ${project-anes}
+						-C ${project-building} ${icons}"/>
+		</exec>
+	</target>
+
+	<target name="*compile all extensions (*.ane files)" depends="compile" unless="true">
+		<for list="${all-extentions-name}" param="actual-extention-name">
+			<sequential>
+				<fail message="Sorry but, the directory ${extensions}/@{actual-extention-name} does not exist.">
+		            <condition>
+		                <not><available file="${extensions}/@{actual-extention-name}" type="dir"/></not>
+		            </condition>
+		        </fail>
+		        
+				<property name="android-extensions" value="${extensions}/@{actual-extention-name}/android"/>
+				<property name="android-options" value="${extensions}/@{actual-extention-name}/android-options.xml"/>
+				<property name="ios-extensions" value="${extensions}/@{actual-extention-name}/ios"/>
+				<property name="ios-options" value="${extensions}/@{actual-extention-name}/ios-options.xml"/>
+
+				<property name="extension-xml" value="${extensions}/@{actual-extention-name}/extension.xml"/>
+
+				<property name="temp-extension-dir" value="${project-building}/swc"/>
+				<property name="temp-extension" value="@{actual-extention-name}.swc"/>
+			
+				<exec executable="${COMPC}" failonerror="true">
+					<arg line="
+						+configname=airmobile
+						-library-path+=${project-assets}
+						-library-path+=${project-third-party}
+						-include-sources+=${project-classes}
+						-source-path+=${project-classes}
+						-output ${extensions}/swc/${temp-extension}
+						-warnings+=true
+						-swf-version=${air-version}
+					"/>
+				</exec>
+				
+				<copy file="${extensions}/swc/${temp-extension}" tofile="${temp-extension-dir}/${temp-extension}"/>
+				<unzip src="${temp-extension-dir}/${temp-extension}" dest="${ios-extensions}"/>
+				<unzip src="${temp-extension-dir}/${temp-extension}" dest="${android-extensions}"/>
+	
+				<exec executable="${ADT}" failonerror="true">
+					<arg line="
+						-package -target ane ${project-anes}/@{actual-extention-name}.ane ${extension-xml} 
+						-swc ${extensions}/swc/${temp-extension}
+						
+						-platform iPhone-ARM ${ios-extensions}/library.swf -C ${ios-extensions} . -platformoptions ${ios-options} 
+						-platform Android-ARM ${android-extensions}/library.swf -C ${android-extensions} .
+					"/>
+				</exec>
+	
+				<delete dir="${extensions}/@{actual-extention-name}/swc" verbose="false"/>
+			</sequential>
+		</for>
+		
+		<delete dir="${android-extensions}" excludes="**.jar" includeemptydirs="true" />
+		<delete dir="${ios-extensions}" excludes="**.a" includeemptydirs="true" />
+		<antcall target="clean"></antcall>
+	</target>
+</project>
