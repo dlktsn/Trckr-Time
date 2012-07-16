@@ -5,6 +5,8 @@ package com.dlktsn.views {
 	import com.dlktsn.core.events.BasecampErrorEvent;
 	import com.dlktsn.core.events.BasecampEvent;
 	import com.dlktsn.core.user.Session;
+	import com.greensock.TweenMax;
+	import com.greensock.easing.Quad;
 
 	import flash.events.Event;
 
@@ -27,6 +29,8 @@ package com.dlktsn.views {
 			Application.basecamp.addEventListener(BasecampEvent.COMPLETE, result);
 			Application.basecamp.addEventListener(BasecampErrorEvent.ERROR, error);
 			Application.basecamp.projects();
+			
+			alpha = 0;
 		}
 
 		private function error(evt : BasecampErrorEvent) : void {
@@ -47,18 +51,23 @@ package com.dlktsn.views {
 			for (var j : int = 0; j < Session.user.projects.length; j++) {
 				if(Session.user.projects[j].todos.length > 0) combo.addItem(String(Session.user.projects[j].name.toUpperCase() + " (" + Session.user.projects[j].todos.length + ")"));
 			}
+			
+			TweenMax.to(this, .3, {
+				alpha:1,
+				ease:Quad.easeOut
+			});
 		}
 
 		override public function destroy(evt : Event = null) : void {
 			super.destroy(evt);
 		}
 
-		override public function show() : void {
-			super.show();
-		}
-
 		override public function hide() : void {
-			super.hide();
+			TweenMax.to(this, .3, {
+				alpha:0,
+				ease:Quad.easeOut,
+				onComplete:super.hide
+			});
 		}
 	}
 }
