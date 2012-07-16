@@ -45,7 +45,7 @@ package com.dlktsn.views {
 			combo.autoHideScrollBar = true;
 			
 			for (var j : int = 0; j < Session.user.projects.length; j++) {
-				if(Session.user.projects[j].todos.length > 0) combo.addItem(Session.user.projects[j].name.toUpperCase());
+				if(Session.user.projects[j].todos.length > 0) combo.addItem(String(Session.user.projects[j].name.toUpperCase() + " (" + Session.user.projects[j].todos.length + ")"));
 			}
 		}
 
