@@ -1,10 +1,11 @@
 package {
 
-	import com.dlktsn.views.Login;
-	import com.dlktsn.views.Splash;
 	import com.dlktsn.core.application.Config;
 	import com.dlktsn.core.application.Views;
 	import com.dlktsn.core.display.Base;
+	import com.dlktsn.views.TodosList;
+	import com.dlktsn.views.Login;
+	import com.dlktsn.views.Splash;
 
 	import flash.events.Event;
 
@@ -24,6 +25,7 @@ package {
 			views = new Views();
 			views.addView("splash", Splash);
 			views.addView("login", Login);
+			views.addView("list", TodosList);
 
 			views.start(this, "splash");
 		}

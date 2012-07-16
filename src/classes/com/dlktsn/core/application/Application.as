@@ -1,5 +1,8 @@
 package com.dlktsn.core.application {
 
+	import com.dlktsn.display.TopBar;
+	import com.dlktsn.display.Background;
+	import com.dlktsn.core.display.Base;
 	import com.dlktsn.core.data.Basecamp;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Expo;
@@ -22,7 +25,10 @@ package com.dlktsn.core.application {
 		private static var _basecamp : Basecamp = new Basecamp();
 		private static var _size : Rectangle = new Rectangle();
 		private static var _position : Point = new Point();
+		private static var _background : Background;
+		private static var _topbar : TopBar;
 		private static var _stage : Stage;
+		private static var _scope : Base;
 		private static var _padding : uint = 10;
 		
 		public function Application(){
@@ -43,6 +49,14 @@ package com.dlktsn.core.application {
 
 		public static function set position(p_position : Point) : void {
 			_position = p_position;
+		}
+
+		public static function get scope() : Base {
+			return _scope;
+		}
+
+		public static function set scope(p_scope : Base) : void {
+			_scope = p_scope;
 		}
 
 		public static function get stage() : Stage {
@@ -67,6 +81,41 @@ package com.dlktsn.core.application {
 
 		public static function set alwaysOnTop(p_value:Boolean) : void {
 			stage.nativeWindow.alwaysInFront = p_value;
+		}
+		
+		public static function set background(p_value:Boolean) : void {
+			if(p_value){
+				if(_background) return;
+				
+				_background = new Background();
+				scope.addChildAt(_background, 0);
+			}else{
+				if(!_background) return;
+				
+				_background.destroy();
+				scope.removeChild(_background);
+				_background = null;
+			}
+		}
+		
+		public static function getTopbar() : TopBar{
+			return _topbar;
+		}
+		
+		public static function set topbar(p_value:Boolean) : void {
+			if(!_background) return;
+			
+			if(p_value){
+				if(_topbar) return;
+				_topbar = new TopBar();
+				_background.addChild(_topbar);
+			}else{
+				if(!_topbar) return;
+				
+				_topbar.destroy();
+				_background.removeChild(_topbar);
+				_topbar = null;
+			}
 		}
 		
 		public static function center(p_size:Point=null) : void {
@@ -129,6 +178,7 @@ package com.dlktsn.core.application {
 		}
 
 		public static function exit(evt:Event=null) : void {
+			background = false;
 			removeListeners();
 
 			System.gc();

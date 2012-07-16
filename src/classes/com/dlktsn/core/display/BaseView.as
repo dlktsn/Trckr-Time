@@ -9,12 +9,11 @@ package com.dlktsn.core.display {
 	 */
 	public class BaseView extends Base {
 		public static const READY : String = "ready";
-		public static const SHOWED: String = "showed";
-		public static const HIDDEN: String = "closed";
+		public static const SHOWED : String = "showed";
+		public static const HIDDEN : String = "closed";
 		public static const DESTROYED : String = "destroyed";
-		
 		private var _id : String;
-		
+
 		public function BaseView() {
 			super();
 		}
@@ -26,17 +25,18 @@ package com.dlktsn.core.display {
 
 		override public function destroy(evt : Event = null) : void {
 			super.destroy(evt);
+
 			dispatchEvent(new Event(DESTROYED));
 		}
-		
-		public function show():void{
+
+		public function show() : void {
 			dispatchEvent(new Event(SHOWED));
 		}
-		
-		public function hide():void{
+
+		public function hide() : void {
 			dispatchEvent(new Event(HIDDEN));
 		}
-		
+
 		protected function addListeners() : void {
 		}
 

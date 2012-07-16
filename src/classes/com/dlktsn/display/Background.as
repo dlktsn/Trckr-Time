@@ -1,15 +1,17 @@
 package com.dlktsn.display {
 
+	import sweatless.graphics.SmartRectangle;
+
 	import com.dlktsn.assets.ADlktsnLogo;
 	import com.dlktsn.assets.ALogo;
 	import com.dlktsn.core.application.Application;
 	import com.dlktsn.core.basics.Colors;
 	import com.dlktsn.core.display.Base;
+
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
-	import sweatless.graphics.SmartRectangle;
 
 
 
@@ -42,8 +44,8 @@ package com.dlktsn.display {
 			trckr.buttonMode = true;
 			trckr.addEventListener(MouseEvent.CLICK, clickTrckr);
 
-			trckr.x = Application.padding;
-			trckr.y = Application.padding;
+			trckr.x = Application.padding - 3;
+			trckr.y = Application.padding - 4;
 
 			dlktsn = new ADlktsnLogo();
 			addChild(dlktsn);

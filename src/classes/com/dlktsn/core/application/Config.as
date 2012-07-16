@@ -24,6 +24,7 @@ package com.dlktsn.core.application {
 		};
 
 		public static function init(p_scope : Base) : void {
+			Application.scope = p_scope;
 			Application.stage = p_scope.stage;
 
 			Application.stage.scaleMode = StageScaleMode.NO_SCALE;

@@ -1,5 +1,6 @@
 package com.dlktsn.views {
 
+	import flash.filters.DropShadowFilter;
 	import sweatless.graphics.SmartRectangle;
 
 	import com.dlktsn.assets.ALogo;
@@ -36,8 +37,6 @@ package com.dlktsn.views {
 			rect = new SmartRectangle();
 			addChild(rect);
 			rect.allCorners = 3;
-			rect.stroke = true;
-			rect.strokeColors = [Colors.BLACK];
 			rect.colors = [Colors.DARK_GRAY];
 			
 			trckr = new ALogo();
@@ -52,7 +51,7 @@ package com.dlktsn.views {
 			Application.center(new Point(rect.width, rect.height));
 			Application.alwaysOnTop = true;
 			
-			filters = [new BlurFilter(10, 10)];
+			filters = [new BlurFilter(10, 10), new DropShadowFilter(5, 45, 0, .3)];
 			alpha = 0;
 		}
 

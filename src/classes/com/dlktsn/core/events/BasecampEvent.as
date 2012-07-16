@@ -9,18 +9,18 @@ package com.dlktsn.core.events {
 		
 		public static const COMPLETE : String = "complete";
 		
-		private var _data : XML;
+		private var _data : *;
 		
-		public function BasecampEvent(p_type : String, p_data:XML, p_bubbles : Boolean = false, p_cancelable : Boolean = false) {
+		public function BasecampEvent(p_type : String, p_data:*=null, p_bubbles : Boolean = false, p_cancelable : Boolean = false) {
 			_data = p_data;
 			super(p_type, p_bubbles, p_cancelable);
 		}
 
-		public function get data() : XML {
+		public function get data() : * {
 			return _data;
 		}
 
-		public function set data(p_data : XML) : void {
+		public function set data(p_data : *) : void {
 			_data = p_data;
 		}
 	}

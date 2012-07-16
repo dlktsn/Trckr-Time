@@ -3,6 +3,8 @@ package com.dlktsn.core.user {
 	 * @author valck
 	 */
 	public class Session {
+		private static var _user : User = new User();
+		
 		private static var _username : String;
 		private static var _password : String;
 		private static var _id : String;
@@ -36,6 +38,14 @@ package com.dlktsn.core.user {
 
 		public static function set password(p_value : String) : void {
 			_password = p_value;
+		}
+
+		public static function get user() : User {
+			return _user;
+		}
+
+		public static function set user(p_user : User) : void {
+			_user = p_user;
 		}
 	}
 }

@@ -1,5 +1,4 @@
 package com.dlktsn.views {
-
 	import sweatless.utils.DisplayObjectUtils;
 
 	import com.bit101.components.CheckBox;
@@ -8,12 +7,12 @@ package com.dlktsn.views {
 	import com.bit101.components.PushButton;
 	import com.bit101.components.VBox;
 	import com.dlktsn.core.application.Application;
+	import com.dlktsn.core.application.Views;
 	import com.dlktsn.core.display.BaseView;
 	import com.dlktsn.core.events.BasecampErrorEvent;
 	import com.dlktsn.core.events.BasecampEvent;
 	import com.dlktsn.core.user.Prefs;
 	import com.dlktsn.core.user.Session;
-	import com.dlktsn.display.Background;
 	import com.dlktsn.ui.Input;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Quad;
@@ -21,13 +20,13 @@ package com.dlktsn.views {
 	import flash.events.Event;
 	import flash.events.FocusEvent;
 	import flash.events.KeyboardEvent;
+	import flash.events.MouseEvent;
 	import flash.ui.Keyboard;
 
 	/**
 	 * @author valck
 	 */
 	public class Login extends BaseView {
-		private var background : Background;
 		private var fieldLogin : Input;
 		private var fieldPassword : Input;
 		private var keepme : CheckBox;
@@ -42,11 +41,9 @@ package com.dlktsn.views {
 			super.create(evt);
 
 			Application.center();
+			Application.background = true;
 			Application.alwaysOnTop = false;
 			Application.startDrag();
-			
-			background = new Background();
-			addChild(background);
 			
 			var rowFields : HBox = new HBox();
 			addChild(rowFields);
@@ -100,7 +97,7 @@ package com.dlktsn.views {
 				fieldLogin.text = Session.username = Prefs.login();
 				fieldPassword.text = Session.password = Prefs.password();
 				
-				post();
+				getData();
 			}else{
 				stage.focus = fieldLogin.textField;
 			}
@@ -122,7 +119,7 @@ package com.dlktsn.views {
 
 		private function prepare(evt : Event = null) : void {
 			if(!fieldLogin.isValid(3, true)){
-				incorrect.text = "PLEASE TYPE A CORRECT E-MAIL.";
+				message(incorrect.text = "PLEASE TYPE A CORRECT E-MAIL.");
 
 				stage.focus = fieldLogin.textField;
 				fieldLogin.textField.setSelection(0, fieldLogin.textField.getLineLength(0));
@@ -130,7 +127,7 @@ package com.dlktsn.views {
 				Application.shake();
 				
 			}else if(!fieldPassword.isValid(3)){
-				incorrect.text = "PLEASE TYPE A CORRECT PASSWORD.";
+				message("PLEASE TYPE A CORRECT PASSWORD.");
 				
 				stage.focus = fieldPassword.textField;
 				fieldPassword.textField.setSelection(0, fieldPassword.textField.getLineLength(0));
@@ -154,11 +151,22 @@ package com.dlktsn.views {
 					Prefs.clear();
 				}
 				
-				post();
+				getData();
 			}
 		}
 
-		private function post() : void {
+		private function message(p_text:String) : void {
+			incorrect.text = p_text;
+			
+			stage.addEventListener(MouseEvent.MOUSE_MOVE, move);
+
+			function move():void{
+				stage.removeEventListener(MouseEvent.MOUSE_MOVE, move);
+				incorrect.text = "";
+			}
+		}
+		
+		private function getData() : void {
 			Application.basecamp.addEventListener(BasecampEvent.COMPLETE, result);
 			Application.basecamp.addEventListener(BasecampErrorEvent.ERROR, error);
 			Application.basecamp.account();
@@ -173,14 +181,16 @@ package com.dlktsn.views {
 			fieldLogin.enabled = true;
 			fieldPassword.enabled = true;
 			
+			message("SOME ERROR OCCURRED, PLEASE TRY AGAIN.");
+			
 			trace("Error", evt.errorID);
 		}
 		
 		private function result(evt : BasecampEvent) : void {
 			Application.basecamp.removeEventListener(BasecampErrorEvent.ERROR, error);
 			Application.basecamp.removeEventListener(BasecampEvent.COMPLETE, result);
-			
-			trace("success");
+
+			Views.goto("list");
 		}
 		
 		override public function destroy(evt : Event = null) : void {
@@ -208,10 +218,6 @@ package com.dlktsn.views {
 			
 			DisplayObjectUtils.remove(this.incorrect, true);
 			incorrect = null;
-			
-			background.destroy();
-			removeChild(background);
-			background = null;
 		}
 
 		override public function show() : void {
