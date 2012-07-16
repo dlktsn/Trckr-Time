@@ -40,8 +40,9 @@ package com.dlktsn.views {
 			Application.basecamp.removeEventListener(BasecampErrorEvent.ERROR, error);
 			Application.basecamp.removeEventListener(BasecampEvent.COMPLETE, result);
 
-			combo = new ComboBox(this, Application.padding, 90, "SELECT SOME ITEM");
+			combo = new ComboBox(this, Application.padding, 90, "SELECT SOME JOB");
 			combo.width = Application.size.width - (Application.padding*2);
+			combo.autoHideScrollBar = true;
 			
 			for (var j : int = 0; j < Session.user.projects.length; j++) {
 				if(Session.user.projects[j].todos.length > 0) combo.addItem(Session.user.projects[j].name.toUpperCase());
