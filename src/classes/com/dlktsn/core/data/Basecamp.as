@@ -88,7 +88,9 @@ package com.dlktsn.core.data {
 			}
 			
 			Session.user.todos = result;
-			dispatchEvent(new BasecampEvent(BasecampEvent.COMPLETE, result));
+			
+			loader.addEventListener(Event.COMPLETE, projectsResults);
+			loader.load(request(URLRequestMethod.GET, String("/projects.xml")));
 		}
 		
 		private function projectsResults(evt:Event):void{
@@ -101,11 +103,18 @@ package com.dlktsn.core.data {
 				var project : Project = new Project();
 				project.id = data..project[i].id; 
 				project.name = data..project[i].name; 
+
+				var todos : Vector.<Todo> = new Vector.<Todo>();
+				for (var j : uint = 0; j < Session.user.todos.length; j++) {
+					if(project.id == Session.user.todos[j].project) todos.push(Session.user.todos[j]);
+				}
+				project.todos = todos;
 				
 				result.push(project);
 			}
 			
 			Session.user.projects = result;
+			
 			dispatchEvent(new BasecampEvent(BasecampEvent.COMPLETE, result));
 		}
 		
@@ -131,11 +140,6 @@ package com.dlktsn.core.data {
 		}
 		
 		public function projects():void{
-			loader.addEventListener(Event.COMPLETE, projectsResults);
-			loader.load(request(URLRequestMethod.GET, String("/projects.xml")));
-		}
-		
-		public function todos():void{
 			loader.addEventListener(Event.COMPLETE, todosResults);
 			loader.load(request(URLRequestMethod.GET, String("/todo_lists.xml?responsible_party="+Session.id)));
 		}
