@@ -1,4 +1,5 @@
 package com.dlktsn.views {
+	import com.bit101.components.ComboBox;
 	import com.dlktsn.core.application.Application;
 	import com.dlktsn.core.display.BaseView;
 	import com.dlktsn.core.events.BasecampErrorEvent;
@@ -11,6 +12,9 @@ package com.dlktsn.views {
 	 * @author valck
 	 */
 	public class TodosList extends BaseView {
+		
+		private var combo : ComboBox;
+		
 		public function TodosList() {
 			super();
 		}
@@ -36,20 +40,12 @@ package com.dlktsn.views {
 			Application.basecamp.removeEventListener(BasecampErrorEvent.ERROR, error);
 			Application.basecamp.removeEventListener(BasecampEvent.COMPLETE, result);
 
+			combo = new ComboBox(this, Application.padding, 90, "SELECT SOME ITEM");
+			combo.width = Application.size.width - (Application.padding*2);
+			
 			for (var j : int = 0; j < Session.user.projects.length; j++) {
-				trace(Session.user.projects[j].name, Session.user.projects[j].todos.length);
+				if(Session.user.projects[j].todos.length > 0) combo.addItem(Session.user.projects[j].name.toUpperCase());
 			}
-
-//			 function toArray():Array {
-//			 var ret:Array = [];
-//			 for each (var elem:Project in Session.user.projects) ret.push(elem.name);
-//			 return ret;
-//			 }
-//						
-//			 var ba : Array = toArray();
-//						
-//			 var c : ComboBox = new ComboBox(this, Application.padding, 90, "teste", ba);
-//			 c.width = Application.size.width - (Application.padding*2);
 		}
 
 		override public function destroy(evt : Event = null) : void {
