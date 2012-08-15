@@ -36,12 +36,6 @@
   <allowBrowserInvocation>true</allowBrowserInvocation>
   <icon>
     <image29x29>./icons/icon29.png</image29x29>
-    <image128x128>AppIcons/128x128-icon128.png</image128x128>
-    <image16x16>AppIcons/16x16-icon16.png</image16x16>
-    <image72x72>AppIcons/72x72-icon72.png</image72x72>
-    <image48x48>AppIcons/48x48-icon48.png</image48x48>
-    <image32x32>AppIcons/32x32-icon32.png</image32x32>
-    <image36x36>AppIcons/36x36-icon36.png</image36x36>
   </icon>
   <android>
     <manifestAdditions><![CDATA[<manifest android:installLocation="auto">

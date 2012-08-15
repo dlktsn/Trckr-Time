@@ -74,15 +74,15 @@ package com.dlktsn.core.data {
 				todo.name = data["todo-list"][i].name;
 				todo.project = data["todo-list"][i]["project-id"];
 				
-				var items : Vector.<TodoItem> = new Vector.<TodoItem>();
-				for (var j : int = 0; j < data["todo-list"][j]["todo-items"]["todo-item"].length(); j++) {
-					var item : TodoItem = new TodoItem();
+				var items : Vector.<Issue> = new Vector.<Issue>();
+				for (var j : int = 0; j < data["todo-list"][i]["todo-items"]["todo-item"].length(); j++) {
+					var item : Issue = new Issue();
 					item.id = data["todo-list"][i]["todo-items"]["todo-item"][j].id;
 					item.name = data["todo-list"][i]["todo-items"]["todo-item"][j].content;
 					items.push(item);
 				}
 				
-				todo.items = items;
+				todo.issues = items;
 				
 				result.push(todo);
 			}

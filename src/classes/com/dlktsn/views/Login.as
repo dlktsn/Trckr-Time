@@ -43,7 +43,6 @@ package com.dlktsn.views {
 			Application.center();
 			Application.background = true;
 			Application.alwaysOnTop = false;
-			Application.startDrag();
 			
 			var rowFields : HBox = new HBox();
 			addChild(rowFields);
@@ -216,7 +215,7 @@ package com.dlktsn.views {
 			DisplayObjectUtils.remove(button, true);
 			button = null;
 			
-			DisplayObjectUtils.remove(this.incorrect, true);
+			DisplayObjectUtils.remove(incorrect, true);
 			incorrect = null;
 		}
 

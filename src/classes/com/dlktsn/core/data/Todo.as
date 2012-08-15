@@ -7,7 +7,7 @@ package com.dlktsn.core.data {
 		private var _id : String;
 		private var _project : String;
 		private var _name : String;
-		private var _items : Vector.<TodoItem>;
+		private var _issues : Vector.<Issue>;
 		
 		public function Todo(){
 		};
@@ -28,13 +28,13 @@ package com.dlktsn.core.data {
 			_name = p_name;
 		}
 
-		public function get items() : Vector.<TodoItem> {
-			return _items;
+		public function get issues() : Vector.<Issue> {
+			return _issues;
 		}
 
-		public function set items(p_items : Vector.<TodoItem>) : void {
-			if(_items) _items.splice(0, _items.length);
-			_items = p_items;
+		public function set issues(p_items : Vector.<Issue>) : void {
+			if(_issues) _issues.splice(0, _issues.length);
+			_issues = p_items;
 		}
 
 		public function get project() : String {

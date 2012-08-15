@@ -1,6 +1,8 @@
 package com.dlktsn.core.user {
-	import com.dlktsn.core.data.Todo;
+
+	import com.dlktsn.utils.VectorUtils;
 	import com.dlktsn.core.data.Project;
+	import com.dlktsn.core.data.Todo;
 
 	/**
 	 * @author valck
@@ -59,7 +61,7 @@ package com.dlktsn.core.user {
 
 		public function set projects(p_projects : Vector.<Project>) : void {
 			if(_projects) _projects.splice(0, _projects.length);
-			_projects = p_projects;
+			_projects = Vector.<Project>(VectorUtils.sortOn(p_projects, "name"));
 		}
 
 		public function get todos() : Vector.<Todo> {
@@ -68,7 +70,7 @@ package com.dlktsn.core.user {
 
 		public function set todos(p_todos : Vector.<Todo>) : void {
 			if(_todos) _todos.splice(0, _todos.length);
-			_todos = p_todos;
+			_todos = Vector.<Todo>(VectorUtils.sortOn(p_todos, "name"));
 		}
 	}
 }

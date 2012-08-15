@@ -2,12 +2,12 @@ package com.dlktsn.core.data {
 	/**
 	 * @author valck
 	 */
-	public class TodoItem {
+	public class Issue {
 		
 		private var _id : String;
 		private var _name : String;
 
-		public function TodoItem() {
+		public function Issue() {
 		};
 
 		public function get id() : String {

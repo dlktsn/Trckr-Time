@@ -3,7 +3,7 @@ package {
 	import com.dlktsn.core.application.Config;
 	import com.dlktsn.core.application.Views;
 	import com.dlktsn.core.display.Base;
-	import com.dlktsn.views.TodosList;
+	import com.dlktsn.views.Todos;
 	import com.dlktsn.views.Login;
 	import com.dlktsn.views.Splash;
 
@@ -21,15 +21,15 @@ package {
 			super.create(evt);
 			
 			Config.init(this);
-
+			
 			views = new Views();
 			views.addView("splash", Splash);
 			views.addView("login", Login);
-			views.addView("list", TodosList);
-
+			views.addView("list", Todos);
+			
 			views.start(this, "splash");
 		}
-
+		
 		override public function destroy(evt : Event = null) : void {
 			super.destroy(evt);
 			views.destroy();

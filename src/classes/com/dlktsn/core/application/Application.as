@@ -1,9 +1,9 @@
 package com.dlktsn.core.application {
 
-	import com.dlktsn.display.TopBar;
-	import com.dlktsn.display.Background;
-	import com.dlktsn.core.display.Base;
 	import com.dlktsn.core.data.Basecamp;
+	import com.dlktsn.core.display.Base;
+	import com.dlktsn.display.Background;
+	import com.dlktsn.display.TopBar;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Expo;
 
@@ -88,6 +88,7 @@ package com.dlktsn.core.application {
 				if(_background) return;
 				
 				_background = new Background();
+				_background.addEventListener(MouseEvent.MOUSE_DOWN, down);
 				scope.addChildAt(_background, 0);
 			}else{
 				if(!_background) return;
@@ -147,10 +148,6 @@ package com.dlktsn.core.application {
 			});
 		}
 
-		public static function startDrag() : void {
-			stage.addEventListener(MouseEvent.MOUSE_DOWN, down);
-		}
-		
 		public static function addListeners() : void {
 			NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE, activate, false, 0, true);
 			NativeApplication.nativeApplication.addEventListener(Event.DEACTIVATE, deactivate, false, 0, true);
@@ -160,27 +157,26 @@ package com.dlktsn.core.application {
 			NativeApplication.nativeApplication.removeEventListener(Event.ACTIVATE, activate);
 			NativeApplication.nativeApplication.removeEventListener(Event.DEACTIVATE, deactivate);
 
-			stage.removeEventListener(MouseEvent.MOUSE_DOWN, down);
+			_background.removeEventListener(MouseEvent.MOUSE_DOWN, down);
 		}
 
 		private static function activate(evt : Event) : void {
 			NativeApplication.nativeApplication.systemIdleMode = SystemIdleMode.KEEP_AWAKE;
-			
 			trace("active");
 		}
 
 		private static function down(evt : Event) : void {
 			stage.nativeWindow.startMove();
 		}
-
+		
 		private static function deactivate(evt : Event) : void {
 			trace("deactive");
 		}
-
+		
 		public static function exit(evt:Event=null) : void {
 			background = false;
 			removeListeners();
-
+			
 			System.gc();
 			NativeApplication.nativeApplication.exit();
 		}

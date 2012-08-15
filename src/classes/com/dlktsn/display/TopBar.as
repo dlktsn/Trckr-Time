@@ -2,10 +2,14 @@ package com.dlktsn.display {
 
 	import br.com.stimuli.loading.BulkLoader;
 
+	import sweatless.utils.DisplayObjectUtils;
+	import sweatless.utils.StringUtils;
 	import sweatless.utils.TransformUtils;
 
+	import com.bit101.components.Label;
 	import com.dlktsn.core.application.Application;
 	import com.dlktsn.core.display.Base;
+	import com.dlktsn.core.user.Session;
 
 	import flash.events.Event;
 
@@ -15,6 +19,8 @@ package com.dlktsn.display {
 	public class TopBar extends Base {
 		
 		private var avatar : Avatar;
+		
+		private var userName : Label;
 		
 		public function TopBar() {
 			super();
@@ -32,12 +38,19 @@ package com.dlktsn.display {
 			
 			avatar.x = (Application.size.width - avatar.width) - Application.padding;
 			avatar.y = Application.padding;
+
+			userName = new Label(this, 0, 0, "LOGGED AS " + StringUtils.abbreviate(Session.user.name.toUpperCase(), 15));
+			userName.x = int(avatar.x + avatar.width) - userName.width;
+			userName.y = int(avatar.y + avatar.height + 3);
 			
 			avatar.show();
 		}
 		
 		override public function destroy(evt : Event = null) : void {
 			super.destroy(evt);
+			
+			DisplayObjectUtils.remove(userName, true);
+			userName = null;
 			
 			avatar.destroy();
 			removeChild(avatar);
